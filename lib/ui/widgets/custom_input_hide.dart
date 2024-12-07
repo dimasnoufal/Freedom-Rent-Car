@@ -30,8 +30,8 @@ class _CustomInputHideState extends State<CustomInputHide> {
           Text(
             widget.title,
             style: blackTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: medium,
+              fontSize: 14,
+              fontWeight: light,
             ),
           ),
           SizedBox(height: 6),

@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter/material.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_button.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_hide.dart';
@@ -5,8 +8,24 @@ import 'package:freedom_rent_car_app/ui/widgets/custom_input_no_hide.dart';
 import 'package:freedom_rent_car_app/ui/widgets/logo_header.dart';
 import '../../shared/theme.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+    postSharedPref();
+  }
+
+  Future<void> postSharedPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setInt('_conditionValue', 2);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +93,9 @@ class LoginPage extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/forget-password');
+                    },
                     child: Text(
                       'Lupa Password?',
                       style: greyTextStyle.copyWith(
@@ -86,7 +107,9 @@ class LoginPage extends StatelessWidget {
             ),
             CustomButton(
               text: 'Login',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/main');
+              },
               widht: double.infinity,
             ),
             Container(
@@ -103,7 +126,9 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
                     child: Text(
                       'Daftar',
                       style: greenTextStyle.copyWith(

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:freedom_rent_car_app/ui/pages/on_boarding_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
@@ -13,11 +15,33 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushNamed(context, '/on-boarding');
-    });
+    splashStart();
+  }
+
+  Future splashStart() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? conditionValue = prefs.getInt('_conditionValue') ?? 0;
+
+    if (conditionValue == 0) {
+      var duration = const Duration(seconds: 3);
+      return Timer(duration, () {
+        prefs.setInt('_conditionValue', 1);
+        Navigator.pushNamed(context, '/on-boarding');
+      });
+    } else if (conditionValue == 1) {
+      var duration = const Duration(seconds: 3);
+      return Timer(duration, () {
+        Navigator.pushNamed(context, '/login');
+      });
+    } else if (conditionValue == 2) {
+      var duration = const Duration(seconds: 3);
+      return Timer(duration, () {
+        Navigator.pushNamed(context, '/main');
+      });
+    } else {
+      print('error');
+    }
   }
 
   @override

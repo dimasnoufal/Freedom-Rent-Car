@@ -22,6 +22,7 @@ class CustomInputNoHide extends StatelessWidget {
         children: [
           Text(
             title,
+            style: blackTextStyle.copyWith(fontSize: 14, fontWeight: light),
           ),
           SizedBox(height: 6),
           TextFormField(
