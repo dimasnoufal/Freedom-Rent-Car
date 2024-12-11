@@ -181,6 +181,12 @@ class _RegisterPageState extends State<RegisterPage> {
               text: 'Daftar Sekarang',
               onPressed: () {
                 Navigator.pushNamed(context, '/login');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Register Berhasil'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
               },
             ),
           ],

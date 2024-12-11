@@ -109,6 +109,12 @@ class _LoginPageState extends State<LoginPage> {
               text: 'Login',
               onPressed: () {
                 Navigator.pushNamed(context, '/main');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Login Berhasil'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
               },
               widht: double.infinity,
             ),

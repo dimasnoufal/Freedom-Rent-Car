@@ -76,6 +76,12 @@ class ForgetPasswordPage extends StatelessWidget {
               text: 'Perbarui Password',
               onPressed: () {
                 Navigator.pushNamed(context, '/login');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Forget Password Berhasil'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
               },
             ),
           ],
