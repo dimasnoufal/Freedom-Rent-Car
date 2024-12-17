@@ -57,6 +57,7 @@ class ForgetPasswordPage extends StatelessWidget {
           children: [
             CustomInputNoHide(
               title: 'Email',
+              onTextChanged: (value) {},
               hintText: 'Masukkan Email',
               margin: EdgeInsets.only(bottom: 16),
             ),

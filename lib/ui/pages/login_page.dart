@@ -83,7 +83,10 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Column(
           children: [
-            CustomInputNoHide(title: 'Username', hintText: 'Masukkan Username'),
+            CustomInputNoHide(
+                title: 'Username',
+                onTextChanged: (value) {},
+                hintText: 'Masukkan Username'),
             CustomInputHide(
                 title: 'Password',
                 hintText: 'Masukkan Password',
@@ -108,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
             CustomButton(
               text: 'Login',
               onPressed: () {
-                Navigator.pushNamed(context, '/main');
+                // Navigator.pushNamed(context, '/main');
+                Navigator.pushNamed(context, '/admin-main');
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Login Berhasil'),

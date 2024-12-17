@@ -157,11 +157,13 @@ class _RegisterPageState extends State<RegisterPage> {
             CustomInputNoHide(
               title: 'Nama Lengkap',
               hintText: 'Masukkan Nama Lengkap',
+              onTextChanged: (value) {},
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomInputNoHide(
               title: 'Email',
               hintText: 'Masukkan Email',
+              onTextChanged: (value) {},
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomInputHide(

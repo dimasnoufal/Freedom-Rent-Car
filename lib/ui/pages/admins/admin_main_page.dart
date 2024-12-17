@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freedom_rent_car_app/cubit/page_cubit.dart';
-import 'package:freedom_rent_car_app/ui/pages/booking_page.dart';
-import 'package:freedom_rent_car_app/ui/pages/home_page.dart';
-import 'package:freedom_rent_car_app/ui/pages/profile_page.dart';
+import 'package:freedom_rent_car_app/ui/pages/admins/admin_booking_page.dart';
+import 'package:freedom_rent_car_app/ui/pages/admins/admin_home_page.dart';
+import 'package:freedom_rent_car_app/ui/pages/admins/admin_profile_page.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_bottom_navigation_item.dart';
-import '../../shared/theme.dart';
+import '../../../shared/theme.dart';
 
-class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+class AdminMainPage extends StatelessWidget {
+  const AdminMainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     Widget BuildContent(int currentIndex) {
       switch (currentIndex) {
         case 0:
-          return HomePage();
+          return AdminHomePage();
         case 1:
-          return BookingPage();
+          return AdminBookingPage();
         case 2:
-          return ProfilePage();
+          return AdminProfilePage();
         default:
-          return HomePage();
+          return AdminHomePage();
       }
     }
 

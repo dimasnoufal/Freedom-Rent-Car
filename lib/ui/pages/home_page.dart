@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:freedom_rent_car_app/ui/pages/detail_car_rent.dart';
+import 'package:freedom_rent_car_app/ui/pages/profile_page.dart';
 import 'package:freedom_rent_car_app/ui/widgets/rent_car_card.dart';
 import 'package:freedom_rent_car_app/ui/widgets/rent_car_tile.dart';
 import '../../shared/theme.dart';
+import '../../shared/string.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,10 +40,17 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              child: Icon(
-                Icons.account_circle,
-                color: kPrimaryColor,
-                size: 50,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ProfilePage();
+                  }));
+                },
+                icon: Icon(
+                  Icons.account_circle,
+                  color: kPrimaryColor,
+                  size: 50,
+                ),
               ),
             )
           ],
@@ -148,7 +158,22 @@ class _HomePageState extends State<HomePage> {
                       year: '2000',
                       imageUrl: 'assets/logo_no_bg.png',
                       rating: 5.0,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return DetailCarRent(
+                              name: nameOfCar[0],
+                              year: '2020',
+                              imageUrl: 'assets/logo_no_bg.png',
+                              rating: 5.0,
+                              about: aboutOfCar[0],
+                              price: 1500000,
+                              feature1: featuretOfCar[0],
+                              feature2: featuretOfCar[1],
+                              feature3: featuretOfCar[2],
+                              feature4: featuretOfCar[3]);
+                        }));
+                      },
                     ),
                     RentCarCard(
                       name: 'Galardo',
@@ -240,33 +265,6 @@ class _HomePageState extends State<HomePage> {
             ImageSlider(),
             ListCarRentBest(),
             ListCarRentAll(),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(defaultMargin, 0, defaultMargin, 120),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Logout Berhasil'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
-                child: Text(
-                  'Logout',
-                  style: whiteTextStyle.copyWith(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
           ],
         )));
   }

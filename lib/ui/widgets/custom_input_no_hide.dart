@@ -6,12 +6,15 @@ class CustomInputNoHide extends StatelessWidget {
   final String hintText;
   final EdgeInsets margin;
   final bool obscureText;
-  const CustomInputNoHide(
-      {super.key,
-      required this.title,
-      required this.hintText,
-      this.margin = EdgeInsets.zero,
-      this.obscureText = false});
+  final Function(String) onTextChanged;
+  const CustomInputNoHide({
+    super.key,
+    required this.title,
+    required this.hintText,
+    this.margin = EdgeInsets.zero,
+    this.obscureText = false,
+    required this.onTextChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,7 @@ class CustomInputNoHide extends StatelessWidget {
           ),
           SizedBox(height: 6),
           TextFormField(
+            onChanged: onTextChanged,
             obscureText: obscureText,
             cursorColor: kPrimaryColor,
             decoration: InputDecoration(
