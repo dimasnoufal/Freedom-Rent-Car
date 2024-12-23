@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../shared/theme.dart';
 
 class LogoHearder extends StatelessWidget {
   const LogoHearder({super.key});

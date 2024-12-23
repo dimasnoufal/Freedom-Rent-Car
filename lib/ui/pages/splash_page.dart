@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:freedom_rent_car_app/ui/pages/on_boarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
