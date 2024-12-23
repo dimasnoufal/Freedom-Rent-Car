@@ -4,14 +4,14 @@ import '../../shared/theme.dart';
 class RentCarTileBook extends StatelessWidget {
   final String name;
   final String year;
-  final String imageUrl;
+  // final String imageUrl;
   final String status;
   final Function() onTap;
   const RentCarTileBook({
     super.key,
     required this.name,
     required this.year,
-    required this.imageUrl,
+    // required this.imageUrl,
     this.status = 'Booked',
     required this.onTap,
   });
@@ -20,9 +20,9 @@ class RentCarTileBook extends StatelessWidget {
   Widget build(BuildContext context) {
     Color statusColor = kRedColor;
 
-    if (status == 'done') {
+    if (status == 'DONE') {
       statusColor = kGreenColor;
-    } else if (status == 'on going') {
+    } else if (status == 'ON GOING') {
       statusColor = kPrimaryColor;
     }
 
@@ -45,7 +45,7 @@ class RentCarTileBook extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage(imageUrl),
+                  image: AssetImage('assets/logo_no_bg.png'),
                 ),
               ),
             ),

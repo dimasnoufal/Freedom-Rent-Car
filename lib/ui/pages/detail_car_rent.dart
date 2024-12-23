@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:freedom_rent_car_app/ui/pages/book_rent_car.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_button.dart';
 import '../../../shared/theme.dart';
 
-class DetailCarRent extends StatelessWidget {
+class DetailCarRent extends StatefulWidget {
+  final int carId;
   final String name;
   final String year;
   final String imageUrl;
@@ -17,6 +19,7 @@ class DetailCarRent extends StatelessWidget {
 
   const DetailCarRent({
     super.key,
+    required this.carId,
     required this.name,
     required this.year,
     required this.imageUrl,
@@ -29,13 +32,38 @@ class DetailCarRent extends StatelessWidget {
     this.feature4 = '',
   });
 
+  @override
+  State<DetailCarRent> createState() => _DetailCarRentState();
+}
+
+class _DetailCarRentState extends State<DetailCarRent> {
+  late String currencyIDR;
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    handleCurrencyPriceIDR();
+  }
+
+  void handleCurrencyPriceIDR() {
+    final priceIDR = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    ).format(widget.price);
+
+    setState(() {
+      currencyIDR = (priceIDR);
+    });
+  }
+
   Widget backgroundImage() {
     return Container(
       width: double.infinity,
       height: 450,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/logo_no_bg.png'),
+          image: NetworkImage(widget.imageUrl),
           fit: BoxFit.cover,
         ),
       ),
@@ -63,12 +91,13 @@ class DetailCarRent extends StatelessWidget {
   Widget content(BuildContext context) {
     Widget ImageDetailCarRent(imageDetailCarRent) {
       return Container(
-        width: 100,
-        height: 100,
+        width: 90,
+        height: 90,
         margin: EdgeInsets.symmetric(
           horizontal: 5,
         ),
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
             image: AssetImage(imageDetailCarRent),
             fit: BoxFit.cover,
@@ -114,16 +143,16 @@ class DetailCarRent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
-                        style: whiteTextStyle.copyWith(
+                        widget.name,
+                        style: blackTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: semiBold,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        year,
-                        style: whiteTextStyle.copyWith(
+                        widget.year,
+                        style: blackTextStyle.copyWith(
                           fontSize: 16,
                           fontWeight: light,
                         ),
@@ -139,8 +168,8 @@ class DetailCarRent extends StatelessWidget {
                     ),
                     SizedBox(width: 6),
                     Text(
-                      rating.toString(),
-                      style: whiteTextStyle.copyWith(
+                      widget.rating.toString(),
+                      style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: medium,
                       ),
@@ -176,7 +205,7 @@ class DetailCarRent extends StatelessWidget {
                 ),
                 SizedBox(height: 6),
                 Text(
-                  about,
+                  widget.about,
                   style: blackTextStyle.copyWith(
                       fontSize: 14, fontWeight: regular, height: 2),
                 ),
@@ -190,13 +219,15 @@ class DetailCarRent extends StatelessWidget {
                     fontWeight: semiBold,
                   ),
                 ),
+                SizedBox(height: 12),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      ImageDetailCarRent('assets/logo_no_bg.png'),
-                      ImageDetailCarRent('assets/logo_no_bg.png'),
-                      ImageDetailCarRent('assets/logo_no_bg.png'),
+                      ImageDetailCarRent('assets/detail_interior_car_1.jpg'),
+                      ImageDetailCarRent('assets/detail_interior_car_2.jpg'),
+                      ImageDetailCarRent('assets/detail_interior_car_3.jpg'),
+                      ImageDetailCarRent('assets/detail_interior_car_4.jpg'),
                     ],
                   ),
                 ),
@@ -213,11 +244,11 @@ class DetailCarRent extends StatelessWidget {
                 Row(
                   children: [
                     InterestItem(
-                      feature1,
+                      widget.feature1,
                       'assets/icon_check.png',
                     ),
                     InterestItem(
-                      feature2,
+                      widget.feature2,
                       'assets/icon_check.png',
                     ),
                   ],
@@ -226,11 +257,11 @@ class DetailCarRent extends StatelessWidget {
                 Row(
                   children: [
                     InterestItem(
-                      feature3,
+                      widget.feature3,
                       'assets/icon_check.png',
                     ),
                     InterestItem(
-                      feature4,
+                      widget.feature4,
                       'assets/icon_check.png',
                     ),
                   ],
@@ -250,7 +281,7 @@ class DetailCarRent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        price.toString(),
+                        currencyIDR.toString(),
                         style: blackTextStyle.copyWith(
                           fontSize: 18,
                           fontWeight: medium,
@@ -258,7 +289,7 @@ class DetailCarRent extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'per 1 jam',
+                        'Per 1 hari',
                         style: greyTextStyle.copyWith(
                           fontSize: 14,
                           fontWeight: light,
@@ -276,12 +307,13 @@ class DetailCarRent extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => BookRentCar(
-                          name: name,
-                          year: year,
-                          imageUrl: imageUrl,
-                          rating: rating,
-                          about: about,
-                          price: price,
+                          carId: widget.carId,
+                          name: widget.name,
+                          year: widget.year,
+                          imageUrl: widget.imageUrl,
+                          rating: widget.rating,
+                          about: widget.about,
+                          price: widget.price,
                         ),
                       ),
                     );

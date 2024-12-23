@@ -37,7 +37,7 @@ class RentCarTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage(imageUrl),
+                  image: NetworkImage(imageUrl),
                 ),
               ),
             ),

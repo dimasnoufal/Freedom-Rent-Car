@@ -1,13 +1,13 @@
 List<String> titlesOnBoarding = [
-  "One App For Everyone",
-  "Build Using Our Heart",
-  "Let's Go",
+  "Semua Dalam Satu Apliaksi",
+  "Pesan Rental Mobil Hanya Di FREEDOM Rent Car",
+  "Daftarkan Dirimu Sekarang juga",
 ];
 
 List<String> descriptionsOnBoarding = [
-  "Our system is helping all people in one system",
-  "System that make use our heart",
-  "We will guide you to where you wanted it too",
+  "Akses Rental Mobil Dalam Satu Aplikasi",
+  "FREEDOM Rent Car Siap Menemani Perjalanan Anda",
+  "Untuk menikmati layanan FREEDOM Car Rent",
 ];
 
 List<String> nameOfCar = [

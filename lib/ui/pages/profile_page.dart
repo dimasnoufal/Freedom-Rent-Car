@@ -1,8 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../shared/theme.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late String name = 'Nama Pengguna';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    handleName();
+  }
+
+  void handleName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String names = prefs.getString('name') ?? '';
+    setState(() {
+      name = names;
+    });
+  }
+
+  void handleLogout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('_conditionValue', 1);
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +54,7 @@ class ProfilePage extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      'Nama User',
+                      name,
                       style: blackTextStyle.copyWith(
                         fontSize: 24,
                         fontWeight: semiBold,
@@ -46,13 +75,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Logout Berhasil'),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
+                    handleLogout();
                   },
                   child: Text(
                     'Logout',

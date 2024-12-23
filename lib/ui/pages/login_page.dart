@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
+import 'package:freedom_rent_car_app/models/login_response.dart';
+import 'package:freedom_rent_car_app/services/api_service.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_button.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_hide.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_no_hide.dart';
@@ -16,15 +19,63 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late ApiService _apiService;
+  late String email;
+  late String password;
+
   @override
   void initState() {
     super.initState();
-    postSharedPref();
+    final dio = Dio();
+    _apiService = ApiService(dio);
   }
 
-  Future<void> postSharedPref() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('_conditionValue', 2);
+  void handleLogin() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      LoginResponse response = await _apiService.login(
+        email,
+        password,
+      );
+
+      prefs.setString('token', response.data.token);
+      prefs.setInt('id', response.data.data.id);
+      prefs.setString('name', response.data.data.name);
+      String token = prefs.getString('token') ?? '';
+      String name = prefs.getString('name') ?? '';
+      print(name);
+      print(token);
+
+      if (response.data.data.role == 'ADMIN') {
+        prefs.setInt('_conditionValue', 3);
+        Navigator.pushNamed(context, '/admin-main');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Login Berhasil: Selamat Datang ${response.data.data.name}'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } else {
+        prefs.setInt('_conditionValue', 2);
+        Navigator.pushNamed(context, '/main');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Login Berhasil: Selamat Datang ${response.data.data.name}'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login Gagal: $e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
@@ -84,12 +135,21 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             CustomInputNoHide(
-                title: 'Username',
-                onTextChanged: (value) {},
-                hintText: 'Masukkan Username'),
+                title: 'Email',
+                onTextChanged: (value) {
+                  setState(() {
+                    email = value;
+                  });
+                },
+                hintText: 'Masukkan Email'),
             CustomInputHide(
                 title: 'Password',
                 hintText: 'Masukkan Password',
+                onTextChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
                 margin: EdgeInsets.symmetric(vertical: 8)),
             Container(
               width: double.infinity,
@@ -111,14 +171,7 @@ class _LoginPageState extends State<LoginPage> {
             CustomButton(
               text: 'Login',
               onPressed: () {
-                // Navigator.pushNamed(context, '/main');
-                Navigator.pushNamed(context, '/admin-main');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Login Berhasil'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                handleLogin();
               },
               widht: double.infinity,
             ),

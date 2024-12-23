@@ -5,12 +5,14 @@ class CustomInputHide extends StatefulWidget {
   final String title;
   final String hintText;
   final EdgeInsets margin;
+  final Function(String) onTextChanged;
 
   const CustomInputHide({
     super.key,
     required this.title,
     required this.hintText,
     this.margin = const EdgeInsets.all(0),
+    required this.onTextChanged,
   });
 
   @override
@@ -36,6 +38,7 @@ class _CustomInputHideState extends State<CustomInputHide> {
           ),
           SizedBox(height: 6),
           TextFormField(
+            onChanged: widget.onTextChanged,
             obscureText: obscureText,
             cursorColor: kPrimaryColor,
             decoration: InputDecoration(

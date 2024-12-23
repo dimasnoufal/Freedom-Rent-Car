@@ -1,11 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:freedom_rent_car_app/services/api_service.dart';
+
 import 'package:freedom_rent_car_app/ui/widgets/custom_button.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_hide.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_no_hide.dart';
 import '../../shared/theme.dart';
 
-class ForgetPasswordPage extends StatelessWidget {
+class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
+
+  @override
+  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
+}
+
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+  late ApiService _apiService;
+  late String email;
+  late String password;
+  late String konfirmasiPassword;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final dio = Dio();
+    _apiService = ApiService(dio);
+  }
+
+  void handleForgetPassword() async {
+    try {
+      await _apiService.forgetPassword(
+        email,
+        password,
+      );
+
+      if (password != konfirmasiPassword) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Password dan Konfirmasi Password tidak cocok'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        return;
+      }
+
+      Navigator.pushNamed(context, '/login');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Forget Password Berhasil'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +112,32 @@ class ForgetPasswordPage extends StatelessWidget {
           children: [
             CustomInputNoHide(
               title: 'Email',
-              onTextChanged: (value) {},
+              onTextChanged: (value) {
+                setState(() {
+                  email = value;
+                });
+              },
               hintText: 'Masukkan Email',
-              margin: EdgeInsets.only(bottom: 16),
-            ),
-            CustomInputHide(
-              title: 'Password Lama',
-              hintText: 'Masukkan Password Lama',
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomInputHide(
               title: 'Password Baru',
               hintText: 'Masukkan Password Baru',
+              onTextChanged: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
+              margin: EdgeInsets.only(bottom: 16),
+            ),
+            CustomInputHide(
+              title: 'Konfirmasi Password Baru',
+              hintText: 'Masukkan Konfirmasi Password Baru',
+              onTextChanged: (value) {
+                setState(() {
+                  konfirmasiPassword = value;
+                });
+              },
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomButton(
@@ -76,13 +145,7 @@ class ForgetPasswordPage extends StatelessWidget {
               verticalMargin: defaultMargin,
               text: 'Perbarui Password',
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Forget Password Berhasil'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                handleForgetPassword();
               },
             ),
           ],
@@ -93,7 +156,7 @@ class ForgetPasswordPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
             Align(
               alignment: Alignment.topRight,

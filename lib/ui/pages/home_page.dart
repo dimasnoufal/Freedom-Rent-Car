@@ -1,11 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:freedom_rent_car_app/services/api_service.dart';
+
+import 'package:freedom_rent_car_app/models/available_cars_response.dart';
+import 'package:freedom_rent_car_app/models/top_cars_response.dart';
 import 'package:freedom_rent_car_app/ui/pages/detail_car_rent.dart';
 import 'package:freedom_rent_car_app/ui/pages/profile_page.dart';
 import 'package:freedom_rent_car_app/ui/widgets/rent_car_card.dart';
 import 'package:freedom_rent_car_app/ui/widgets/rent_car_tile.dart';
 import '../../shared/theme.dart';
-import '../../shared/string.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +22,80 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
   CarouselSliderController carouselController = CarouselSliderController();
+  late ApiService _apiService;
+  List<Datum> availableCars = [];
+  List<Datums> topCars = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initializeApiService();
+  }
+
+  Future<void> _initializeApiService() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+    print(token);
+
+    final dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer $token';
+    _apiService = ApiService(dio);
+
+    handleGetTopCars();
+    handleGetAvailableCars();
+  }
+
+  void handleGetTopCars() async {
+    try {
+      TopCarsResponse response = await _apiService.getTopCars();
+      print(response.meta.message);
+
+      setState(() {
+        topCars = response.data;
+        print(topCars);
+      });
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Fetch Data Berhasil'),
+      //     behavior: SnackBarBehavior.floating,
+      //   ),
+      // );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  void handleGetAvailableCars() async {
+    try {
+      AvailableCarsResponse response = await _apiService.getAvailableCars();
+
+      setState(() {
+        availableCars = response.data;
+        print(availableCars);
+      });
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Fetch Data Berhasil'),
+      //     behavior: SnackBarBehavior.floating,
+      //   ),
+      // );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,42 +232,32 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    RentCarCard(
-                      name: 'Galardo',
-                      year: '2000',
-                      imageUrl: 'assets/logo_no_bg.png',
-                      rating: 5.0,
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return DetailCarRent(
-                              name: nameOfCar[0],
-                              year: '2020',
-                              imageUrl: 'assets/logo_no_bg.png',
-                              rating: 5.0,
-                              about: aboutOfCar[0],
-                              price: 1500000,
-                              feature1: featuretOfCar[0],
-                              feature2: featuretOfCar[1],
-                              feature3: featuretOfCar[2],
-                              feature4: featuretOfCar[3]);
-                        }));
-                      },
-                    ),
-                    RentCarCard(
-                      name: 'Galardo',
-                      year: '2000',
-                      imageUrl: 'assets/logo_no_bg.png',
-                      rating: 5.0,
-                      onTap: () {},
-                    ),
-                    RentCarCard(
-                      name: 'Galardo',
-                      year: '2000',
-                      imageUrl: 'assets/logo_no_bg.png',
-                      rating: 5.0,
-                      onTap: () {},
-                    ),
+                    ...topCars
+                        .map((car) => RentCarCard(
+                              name: car.name,
+                              year: car.year,
+                              imageUrl: car.image,
+                              rating: double.parse(car.rating ?? '0.0'),
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return DetailCarRent(
+                                      carId: car.id,
+                                      name: car.name,
+                                      year: car.year,
+                                      imageUrl: car.image,
+                                      rating: double.parse(car.rating ?? '0.0'),
+                                      about: car.about,
+                                      price: double.parse(
+                                          car.price.toString() ?? '0.0'),
+                                      feature1: car.feature1,
+                                      feature2: car.feature2 ?? '',
+                                      feature3: car.feature3 ?? '',
+                                      feature4: car.feature4 ?? '');
+                                }));
+                              },
+                            ))
+                        .toList(),
                   ],
                 ),
               ),
@@ -216,41 +285,32 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: semiBold,
               ),
             ),
-            RentCarTile(
-              name: 'Avanza',
-              year: '2000',
-              imageUrl: 'assets/logo_no_bg.png',
-              rating: 4.6,
-              onTap: () {},
-            ),
-            RentCarTile(
-              name: 'Avanza',
-              year: '2000',
-              imageUrl: 'assets/logo_no_bg.png',
-              rating: 4.6,
-              onTap: () {},
-            ),
-            RentCarTile(
-              name: 'Avanza',
-              year: '2000',
-              imageUrl: 'assets/logo_no_bg.png',
-              rating: 4.6,
-              onTap: () {},
-            ),
-            RentCarTile(
-              name: 'Avanza',
-              year: '2000',
-              imageUrl: 'assets/logo_no_bg.png',
-              rating: 4.6,
-              onTap: () {},
-            ),
-            RentCarTile(
-              name: 'Avanza',
-              year: '2000',
-              imageUrl: 'assets/logo_no_bg.png',
-              rating: 4.6,
-              onTap: () {},
-            ),
+            ...availableCars
+                .map((car) => RentCarTile(
+                      name: car.name,
+                      year: car.year,
+                      imageUrl: car.image,
+                      rating: double.parse(car.rating ?? '0.0'),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return DetailCarRent(
+                              carId: car.id,
+                              name: car.name,
+                              year: car.year,
+                              imageUrl: car.image,
+                              rating: double.parse(car.rating ?? '0.0'),
+                              about: car.about,
+                              price:
+                                  double.parse(car.price.toString() ?? '0.0'),
+                              feature1: car.feature1,
+                              feature2: car.feature2 ?? '',
+                              feature3: car.feature3 ?? '',
+                              feature4: car.feature4 ?? '');
+                        }));
+                      },
+                    ))
+                .toList(),
           ],
         ),
       );

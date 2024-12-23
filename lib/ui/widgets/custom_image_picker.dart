@@ -7,11 +7,13 @@ import '../../shared/theme.dart';
 class CustomImagePicker extends StatefulWidget {
   final String title;
   final EdgeInsets margin;
+  final Function(File) onImagePicked;
 
   const CustomImagePicker({
     super.key,
     required this.title,
     this.margin = const EdgeInsets.all(0),
+    required this.onImagePicked,
   });
 
   @override
@@ -38,6 +40,9 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
           await _picker.pickImage(source: ImageSource.gallery);
       setState(() {
         _image = pickedFile;
+        if (_image != null) {
+          widget.onImagePicked(File(_image!.path));
+        }
       });
     } catch (e) {
       print('Error picking image: $e');

@@ -22,16 +22,19 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       return CarouselSlider(
         items: [
           Image.asset(
-            'assets/logo_no_bg.png',
-            height: 330,
+            'assets/icon_onboarding1.png',
+            height: 250,
+            width: 250,
           ),
           Image.asset(
-            'assets/logo_no_bg.png',
-            height: 330,
+            'assets/icon_onboarding2.png',
+            height: 250,
+            width: 250,
           ),
           Image.asset(
-            'assets/logo_no_bg.png',
-            height: 330,
+            'assets/icon_onboarding3.png',
+            height: 250,
+            width: 250,
           ),
         ],
         options: CarouselOptions(

@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:freedom_rent_car_app/models/register_response.dart';
+import 'package:freedom_rent_car_app/services/api_service.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_button.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_hide.dart';
 import 'package:freedom_rent_car_app/ui/widgets/custom_input_no_hide.dart';
@@ -15,12 +18,68 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late bool isAllowOrNo;
+  late ApiService _apiService;
+
+  late String email;
+  late String name;
+  late String password;
+  late String konfirmasiPassword;
+
+  String phoneNumber = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     isAllowOrNo = widget.conditionAllowOrNo;
+    final dio = Dio();
+    _apiService = ApiService(dio);
+  }
+
+  void handleRegister() async {
+    if (!isAllowOrNo) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Anda harus menyetujui syarat dan ketentuan'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (password != konfirmasiPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password dan Konfirmasi Password tidak cocok'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    try {
+      RegisterResponse response = await _apiService.register(
+        email,
+        name,
+        password,
+        phoneNumber,
+      );
+
+      Navigator.pushNamed(context, '/login');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Register Berhasil: ${response.data.message}'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Register Gagal: $e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
@@ -157,23 +216,41 @@ class _RegisterPageState extends State<RegisterPage> {
             CustomInputNoHide(
               title: 'Nama Lengkap',
               hintText: 'Masukkan Nama Lengkap',
-              onTextChanged: (value) {},
+              onTextChanged: (value) {
+                setState(() {
+                  name = value;
+                });
+              },
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomInputNoHide(
               title: 'Email',
               hintText: 'Masukkan Email',
-              onTextChanged: (value) {},
+              onTextChanged: (value) {
+                setState(() {
+                  email = value;
+                });
+              },
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomInputHide(
               title: 'Password',
               hintText: 'Masukkan Password',
+              onTextChanged: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
               margin: EdgeInsets.only(bottom: 16),
             ),
             CustomInputHide(
               title: 'Konfirmasi Password',
               hintText: 'Masukkan Konfirmasi Password',
+              onTextChanged: (value) {
+                setState(() {
+                  konfirmasiPassword = value;
+                });
+              },
               margin: EdgeInsets.only(bottom: 16),
             ),
             CheckBoxSyaratdanKetentuan(),
@@ -182,13 +259,7 @@ class _RegisterPageState extends State<RegisterPage> {
               verticalMargin: defaultMargin,
               text: 'Daftar Sekarang',
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Register Berhasil'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                handleRegister();
               },
             ),
           ],

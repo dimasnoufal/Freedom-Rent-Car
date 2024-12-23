@@ -6,12 +6,14 @@ class CustomDateTime extends StatefulWidget {
   final String hintText1;
   final String hintText2;
   final EdgeInsets margin;
+  final Function(String) onTextChanged;
   const CustomDateTime({
     super.key,
     required this.title,
     required this.hintText1,
     required this.hintText2,
     this.margin = const EdgeInsets.all(0),
+    required this.onTextChanged,
   });
 
   @override
@@ -45,6 +47,7 @@ class _CustomDateTimeState extends State<CustomDateTime> {
     if (picked != null) {
       setState(() {
         dateController.text = "${picked.toLocal()}".split(' ')[0];
+        _updateDateTime();
       });
     }
   }
@@ -70,7 +73,16 @@ class _CustomDateTimeState extends State<CustomDateTime> {
     if (picked != null) {
       setState(() {
         timeController.text = picked.format(context);
+        _updateDateTime();
       });
+    }
+  }
+
+  void _updateDateTime() {
+    final date = dateController.text;
+    final time = timeController.text;
+    if (date.isNotEmpty && time.isNotEmpty) {
+      widget.onTextChanged('$date $time');
     }
   }
 

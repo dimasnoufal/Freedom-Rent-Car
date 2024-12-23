@@ -39,6 +39,11 @@ class _SplashPageState extends State<SplashPage> {
       return Timer(duration, () {
         Navigator.pushNamed(context, '/main');
       });
+    } else if (conditionValue == 3) {
+      var duration = const Duration(seconds: 3);
+      return Timer(duration, () {
+        Navigator.pushNamed(context, '/admin-main');
+      });
     } else {
       print('error');
     }
