@@ -162,27 +162,27 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         margin: EdgeInsets.symmetric(
           vertical: 16,
-          horizontal: defaultMargin,
+          horizontal: 16,
         ),
         child: Column(
           children: [
             CarouselSlider(
               items: [
                 Image.asset(
-                  'assets/logo_no_bg.png',
-                  height: 100,
+                  'assets/banner_1.png',
+                  height: 150,
                 ),
                 Image.asset(
-                  'assets/logo_no_bg.png',
-                  height: 100,
+                  'assets/banner_2.png',
+                  height: 150,
                 ),
                 Image.asset(
-                  'assets/logo_no_bg.png',
-                  height: 100,
+                  'assets/banner_3.png',
+                  height: 150,
                 ),
               ],
               options: CarouselOptions(
-                height: 100,
+                height: 150,
                 autoPlay: true,
                 enableInfiniteScroll: true,
                 reverse: false,

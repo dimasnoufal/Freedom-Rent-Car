@@ -17,7 +17,7 @@ import '../models/register_response.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "https://0c7a-103-171-165-160.ngrok-free.app/api/")
+@RestApi(baseUrl: "https://15e6-139-0-162-245.ngrok-free.app/api/")
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
