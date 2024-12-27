@@ -107,7 +107,7 @@ class _DetailCarRentState extends State<DetailCarRent> {
     }
 
     Widget InterestItem(feature, imageUrl) {
-      return Expanded(
+      return Flexible(
         child: Row(
           children: [
             Container(
@@ -121,7 +121,12 @@ class _DetailCarRentState extends State<DetailCarRent> {
                 ),
               ),
             ),
-            Text(feature, style: blackTextStyle),
+            Expanded(
+              child: Text(
+                feature,
+                style: blackTextStyle,
+              ),
+            ),
           ],
         ),
       );
@@ -241,6 +246,7 @@ class _DetailCarRentState extends State<DetailCarRent> {
                     fontWeight: semiBold,
                   ),
                 ),
+                SizedBox(height: 12),
                 Row(
                   children: [
                     InterestItem(

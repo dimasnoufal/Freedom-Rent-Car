@@ -167,7 +167,7 @@ class _BookRentCarState extends State<BookRentCar> {
         height: 450,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/logo_no_bg.png'),
+            image: NetworkImage(widget.imageUrl),
             fit: BoxFit.cover,
           ),
         ),

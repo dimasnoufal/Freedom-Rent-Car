@@ -88,6 +88,8 @@ class RentCarCard extends StatelessWidget {
                       fontSize: 18,
                       fontWeight: semiBold,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   SizedBox(
                     height: 5,
